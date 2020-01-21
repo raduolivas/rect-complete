@@ -1,8 +1,24 @@
 import React, { useState } from "react";
-import "./App.css";
+import classes from "./App.module.css";
 
-import Person from "./Person/Person";
+// import styled from 'styled-components';
 
+import Persons from "../components/Persons/Persons";
+import Cockpit from '../components/Cockpit/Cockpit';
+
+// const StyledButton = styled.button`
+//   background-color: ${props => props.alt ? 'red' : 'green'};
+//   color: white;
+//   font: inherit;
+//   border: 1px solid blue;
+//   padding: 8px;
+//   cursor: pointer;
+
+//   &:hover {
+//     background: ${props => props.alt ? 'salmon' : 'lightgreen'};
+//     color: black;
+//   }
+// `
 const App = props => {
   const [personsState, setPersonsState] = useState({
     persons: [
@@ -40,43 +56,37 @@ const App = props => {
     // const person = Object.assign({}, personsState.persons[personIndex]);
 
     person.name = event.target.value;
+
     const persons = [...personsState.persons];
     persons[personIndex] = person;
 
     setPersonsState(prevState => {return {...prevState, persons: persons}});
   };
 
-  const style = {
-    backgroundColor: "white",
-    font: "inherit",
-    border: "1px solid blue",
-    padding: "8px",
-    cursor: "pointer"
-  };
 
   let persons = null;
+  
   
   if (personsState.showPersons) {
     persons = (
       <div>
-        {personsState.persons.map((person, index) => {
-          return <Person 
-            click={() => deletePersonHandler(index)}
-            name={person.name}
-            age={person.age} 
-            key={person.id}
-            changed={(event) => nameChangedHandler(event, person.id)}/>
-        })}
+        <Persons 
+          persons={personsState.persons}
+          clicked={deletePersonHandler}
+          changed={nameChangedHandler} />
       </div>
-    )
+    );
   }
+  
+  
 
   return (
-    <div className="App">
-      <button style={style} onClick={togglePersonsHandler}>
-        Toggle Persons
-      </button>
-         { persons }
+    <div className={classes.App}>
+        <Cockpit 
+        showPerson={personsState.showPersons} 
+        persons={personsState}
+        clicked={togglePersonsHandler}/>
+        { persons }
     </div>
   );
 };
